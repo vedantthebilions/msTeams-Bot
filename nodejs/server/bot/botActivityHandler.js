@@ -10,6 +10,7 @@ const {
   ActivityHandler,
   BotFrameworkAdapter,
   ActionTypes,
+  AttachmentLayoutTypes
 } = require("botbuilder");
 const adaptiveCards = require("../models/adaptiveCard");
 const conversationReferences = {};
@@ -690,7 +691,7 @@ class BotActivityHandler extends TeamsActivityHandler {
       conversationParameters,
       async (context) => {
         // await context.sendActivity(message + ` test msg`);
-        let title = `Bilions Teams welcomes you,` + context.activity.from.name + '!';
+        let title = `Bilions Teams welcomes you,` + member.name + '!';
         await context.sendActivity({
           attachments: [
             CardFactory.adaptiveCard(
@@ -741,7 +742,9 @@ class BotActivityHandler extends TeamsActivityHandler {
       null,
       cardActions
     );
-    await context.sendActivity(MessageFactory.attachment(card));
+    // await context.sendActivity({attachmentLayout: AttachmentLayoutTypes.Carousel, card}).then((response)=>console.log(response))
+
+     await context.sendActivity(MessageFactory.attachment(card))
     // await context.sendActivity({
     //   attachments: [
     //     CardFactory.adaptiveCard(
@@ -758,7 +761,8 @@ class BotActivityHandler extends TeamsActivityHandler {
       null,
       cardActions
     );
-    await context.sendActivity(MessageFactory.attachment(card));
+    await context.sendActivity({ attachmentLayout: AttachmentLayoutTypes.Carousel, card});
+    // await context.sendActivity(MessageFactory.attachment(card));
     // await context.sendActivity({
     //   attachments: [
     //     CardFactory.adaptiveCard(
@@ -834,16 +838,16 @@ class BotActivityHandler extends TeamsActivityHandler {
     const cardActionsOptions = [
       {
         type: ActionTypes.MessageBack,
-        title: "No",
-        value: 0,
-        text: "No",
-      },
-      {
-        type: ActionTypes.MessageBack,
         title: "Yes",
         value: 1,
         text: "Yes",
-      }
+      },
+      {
+        type: ActionTypes.MessageBack,
+        title: " I would not like to disclose my salary",
+        value: 0,
+        text: "No",
+      },
     ];
     return cardActionsOptions;
   };
